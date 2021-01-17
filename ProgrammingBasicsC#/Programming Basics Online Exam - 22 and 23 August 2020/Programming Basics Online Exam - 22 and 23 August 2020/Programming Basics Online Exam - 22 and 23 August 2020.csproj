@@ -1,0 +1,9 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <RootNamespace>Programming_Basics_Online_Exam___22_and_23_August_2020</RootNamespace>
+  </PropertyGroup>
+
+</Project>
