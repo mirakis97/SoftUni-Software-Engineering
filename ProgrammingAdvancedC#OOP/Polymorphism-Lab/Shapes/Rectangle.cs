@@ -1,18 +1,19 @@
 ﻿namespace Shapes
 {
-    public abstract class Rectangle : Shape
+    public class Rectangle : Shape
     {
-        private double height;
         private double width;
+        private double height;
 
-        public Rectangle(double height, double width)
+        public Rectangle(double width, double height)
         {
-            this.Height = height;
-            this.Width = width;
+            Width = width;
+            Height = height;
         }
+
         public double Height
         {
-            get { return this.height; }
+            get => this.height;
             private set
             {
                 this.height = value;
@@ -20,18 +21,25 @@
         }
         public double Width
         {
-            get { return this.width; }
+            get => this.width;
             private set
             {
                 this.width = value;
             }
         }
-        public override double CalculateArea() => this.Width * this.Height;
-        public override double CalculatePerimeter() => this.Width * 2 + this.Height * 2;
 
+        public override double CalculateArea()
+        {
+            return this.Height * this.Width;
+        }
+
+        public override double CalculatePerimeter()
+        {
+            return 2 * this.Height + 2 * this.Width;
+        }
         public override string Draw()
         {
-            return base.Draw() + "Rectangle";
+            return base.Draw() + nameof(Rectangle);
         }
     }
 }

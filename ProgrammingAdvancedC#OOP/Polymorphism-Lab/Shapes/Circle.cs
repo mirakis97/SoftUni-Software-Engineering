@@ -2,11 +2,11 @@
 
 namespace Shapes
 {
-    public abstract class Circle : Shape
+    public  class Circle : Shape
     {
         private double radius;
 
-        protected Circle(double radius)
+        public Circle(double radius)
         {
             this.Radius = radius;
         }
@@ -29,7 +29,7 @@ namespace Shapes
 
         public override string Draw()
         {
-            return base.Draw() + "Circle";
+            return base.Draw() + nameof(Circle);
         }
     }
 }
