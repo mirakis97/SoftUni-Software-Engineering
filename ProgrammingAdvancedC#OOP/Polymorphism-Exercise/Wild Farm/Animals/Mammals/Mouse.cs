@@ -10,7 +10,7 @@ namespace Wild_Farm.Animals.Mammals
         private const double BaseWeigthModifier = 0.1;
         private static HashSet<string> AllowedFood = new HashSet<string>()
         {
-            nameof(Meat),
+            nameof(Vegetable),
             nameof(Fruit)
         };
         public Mouse(string name, double weight, string livingRegion)
