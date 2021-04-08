@@ -40,7 +40,7 @@ namespace OnlineShop.Models.Products
             get => this.manufacturer;
             private set
             {
-                if (string.IsNullOrEmpty(value))
+                if (string.IsNullOrWhiteSpace(value))
                 {
                     throw new ArgumentException(ExceptionMessages.InvalidManufacturer);
                 }
@@ -53,7 +53,7 @@ namespace OnlineShop.Models.Products
             get => this.model;
             private set
             {
-                if (string.IsNullOrEmpty(value))
+                if (string.IsNullOrWhiteSpace(value))
                 {
                     throw new ArgumentException(ExceptionMessages.InvalidModel);
                 }

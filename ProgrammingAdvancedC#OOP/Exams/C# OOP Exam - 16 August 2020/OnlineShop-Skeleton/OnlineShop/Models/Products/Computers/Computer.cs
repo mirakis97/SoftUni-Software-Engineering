@@ -8,7 +8,7 @@ using System.Text;
 
 namespace OnlineShop.Models.Products.Computers
 {
-    public abstract class Computer : Product,IComputer
+    public abstract class Computer : Product, IComputer
     {
         private decimal computerPrice;
         private double computerPerformance;
@@ -59,7 +59,7 @@ namespace OnlineShop.Models.Products.Computers
 
         public void AddComponent(IComponent component)
         {
-            if (components.Any(x => x.GetType() == component.GetType()))
+            if (components.Any(x => x.GetType().Name == component.GetType().Name))
             {
                 throw new ArgumentException(string.Format(ExceptionMessages.ExistingComponent, component, GetType().Name, Id));
             }
@@ -69,7 +69,7 @@ namespace OnlineShop.Models.Products.Computers
 
         public void AddPeripheral(IPeripheral peripheral)
         {
-            if (peripherals.Any(x => x.GetType() == peripheral.GetType()))
+            if (peripherals.Any(x => x.GetType().Name == peripheral.GetType().Name))
             {
                 throw new ArgumentException(string.Format(ExceptionMessages.ExistingPeripheral, peripheral, GetType().Name, Id));
             }
@@ -79,9 +79,9 @@ namespace OnlineShop.Models.Products.Computers
 
         public IComponent RemoveComponent(string componentType)
         {
-            if (!components.Any())
+            if (components.Count == 0 || componentType == null)
             {
-                throw new ArgumentException(string.Format(ExceptionMessages.NotExistingComponent , componentType,GetType().Name, Id));
+                throw new ArgumentException(string.Format(ExceptionMessages.NotExistingComponent, componentType, GetType().Name, Id));
             }
 
             IComponent component = components.First(c => c.GetType().Name == componentType);
@@ -93,12 +93,13 @@ namespace OnlineShop.Models.Products.Computers
 
         public IPeripheral RemovePeripheral(string peripheralType)
         {
-            if (!peripherals.Any())
+            IPeripheral peripheral = peripherals.FirstOrDefault(c => c.GetType().Name == peripheralType);
+
+            if (peripherals.Count == 0 || peripheralType == null)
             {
-                throw new ArgumentException(string.Format(ExceptionMessages.NotExistingComponent, peripheralType, GetType().Name, Id));
+                throw new ArgumentException(string.Format(ExceptionMessages.NotExistingPeripheral, peripheralType, GetType().Name, Id));
             }
 
-            IPeripheral peripheral = peripherals.First(c => c.GetType().Name == peripheralType);
 
             peripherals.Remove(peripheral);
 
@@ -107,16 +108,18 @@ namespace OnlineShop.Models.Products.Computers
 
         public override string ToString()
         {
+           
             StringBuilder sb = new StringBuilder();
             sb.AppendLine($"Overall Performance: {OverallPerformance:f2}. Price: {Price:f2} - {GetType().Name}: {Manufacturer} {Model} (Id: {Id})");
             sb.AppendLine($" Components ({components.Count})");
+          
             foreach (var component in components)
             {
                 sb.AppendLine($"  {component}");
             }
 
-            sb.AppendLine($" Peripherals ({peripherals.Count}); Average Overall Performance ({peripherals.Average(x =>x.OverallPerformance):F2}):");
-
+            sb.AppendLine($" Peripherals ({peripherals.Count}); Average Overall Performance ({peripherals.Average(x => x.OverallPerformance):F2}):");
+    
             foreach (var peripheral in peripherals)
             {
                 sb.AppendLine($"  {peripheral}");
