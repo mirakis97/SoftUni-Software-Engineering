@@ -156,30 +156,32 @@ namespace WarCroft.Core
         {
             string healerName = args[0];
             string healingReceiverName = args[1];
-            Priest healer = (Priest)this.characters.Where(c => c.GetType().Name == nameof(Priest)).FirstOrDefault(c => c.Name == healerName);
-            Character healerReceiver = this.characters.FirstOrDefault(x => x.Name == healingReceiverName);
+          
 
             StringBuilder sb = new StringBuilder();
-            if (healer == null)
+            if (!characters.Any(x => x.Name == healerName))
             {
                 throw new ArgumentException(string.Format(ExceptionMessages.CharacterNotInParty, healerName));
             }
-            else if (healerReceiver == null)
+            else if (!characters.Any(x => x.Name == healingReceiverName))
             {
                 throw new ArgumentException(string.Format(ExceptionMessages.CharacterNotInParty, healingReceiverName));
             }
 
-            if (!healer.IsAlive)
+
+
+            var healer = this.characters.FirstOrDefault(c => c.Name == healerName);
+            var healerReceiver = this.characters.FirstOrDefault(x => x.Name == healingReceiverName);
+
+            if (healer.GetType().Name != "Priest")
             {
-                throw new ArgumentException(string.Format(ExceptionMessages.HealerCannotHeal, healer));
+                throw new ArgumentException(string.Format(ExceptionMessages.HealerCannotHeal, healer.Name));
             }
 
-            if (!healerReceiver.IsAlive)
-            {
-                throw new ArgumentException(ExceptionMessages.AffectedCharacterDead);
-            }
+            Priest priest = (Priest)healer;
 
-            healer.Heal(healerReceiver);
+
+            priest.Heal(healerReceiver);
 
             sb.AppendLine($"{healer.Name} heals {healerReceiver.Name} for {healer.AbilityPoints}! {healerReceiver.Name} has {healerReceiver.Health} health now!");
 
