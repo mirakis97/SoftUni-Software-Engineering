@@ -1,26 +1,32 @@
-﻿namespace AquaShop.Repositories
+﻿using AquaShop.Models.Decorations.Contracts;
+using AquaShop.Repositories.Contracts;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+
+namespace AquaShop.Repositories
 {
-    using System.Collections.Generic;
-    using System.Linq;
-
-    using Contracts;
-    using Models.Decorations.Contracts;
-
     public class DecorationRepository : IRepository<IDecoration>
     {
-        private readonly ICollection<IDecoration> decorations;
-
+        private ICollection<IDecoration> models;
         public DecorationRepository()
         {
-            this.decorations = new List<IDecoration>();
+            this.models = new List<IDecoration>();
+        }
+        public IReadOnlyCollection<IDecoration> Models => this.models.ToList().AsReadOnly();
+
+        public void Add(IDecoration model)
+        {
+            this.models.Add(model);
         }
 
-        public IReadOnlyCollection<IDecoration> Models => this.decorations.ToList().AsReadOnly();
+        public IDecoration FindByType(string type)
+        {
+                return this.models.FirstOrDefault(x => x.GetType().Name == type);
+        }
+        public bool Remove(IDecoration model) => this.models.Remove(model);
 
-        public void Add(IDecoration model) => this.decorations.Add(model);
 
-        public IDecoration FindByType(string type) => this.Models.FirstOrDefault(d => d.GetType().Name == type);
-
-        public bool Remove(IDecoration model) => this.decorations.Remove(model);
     }
 }

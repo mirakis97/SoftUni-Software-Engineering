@@ -1,78 +1,75 @@
-﻿namespace AquaShop.Core
+﻿using AquaShop.Core.Contracts;
+using AquaShop.Models.Aquariums;
+using AquaShop.Models.Aquariums.Contracts;
+using AquaShop.Models.Decorations;
+using AquaShop.Models.Decorations.Contracts;
+using AquaShop.Repositories;
+using AquaShop.Utilities.Messages;
+using System;
+using System.Collections.Generic;
+using System.Text;
+using System.Linq;
+using AquaShop.Models.Fish.Contracts;
+using AquaShop.Models.Fish;
+using AquaShop.Repositories.Contracts;
+
+namespace AquaShop.Core
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Text;
-
-    using Contracts;
-    using Models.Aquariums;
-    using Models.Aquariums.Contracts;
-    using Models.Decorations;
-    using Models.Decorations.Contracts;
-    using Models.Fish;
-    using Models.Fish.Contracts;
-    using Repositories;
-    using Repositories.Contracts;
-    using Utilities.Messages;
-
     public class Controller : IController
     {
-        private readonly IRepository<IDecoration> decorations;
-        private readonly List<IAquarium> aquariums;
-
+        private IRepository<IDecoration> decorations;
+        private List<IAquarium> aquariums;
         public Controller()
         {
             this.decorations = new DecorationRepository();
             this.aquariums = new List<IAquarium>();
         }
-
         public string AddAquarium(string aquariumType, string aquariumName)
         {
             IAquarium aquarium = null;
 
-            switch (aquariumType)
+
+            if (aquariumType == "FreshwaterAquarium")
+
             {
-                case "FreshwaterAquarium":
-                    aquarium = new FreshwaterAquarium(aquariumName);
-                    break;
-                case "SaltwaterAquarium":
-                    aquarium = new SaltwaterAquarium(aquariumName);
-                    break;
+                aquarium = new FreshwaterAquarium(aquariumName);
+            }
+            else if (aquariumType == "SaltwaterAquarium")
+            {
+                aquarium = new SaltwaterAquarium(aquariumName);
+            }
+            else
+            {
+                throw new ArgumentException(ExceptionMessages.InvalidAquariumType);
             }
 
-            if (aquarium is null)
-            {
-                throw new InvalidOperationException(ExceptionMessages.InvalidAquariumType);
-            }
+            aquariums.Add(aquarium);
 
-            this.aquariums.Add(aquarium);
-
-            return string.Format(OutputMessages.SuccessfullyAdded, aquariumType);
+            return $"Successfully added {aquariumType}.";
         }
 
         public string AddDecoration(string decorationType)
         {
             IDecoration decoration = null;
 
-            switch (decorationType)
-            {
-                case "Ornament":
-                    decoration = new Ornament();
-                    break;
-                case "Plant":
-                    decoration = new Plant();
-                    break;
-            }
 
-            if (decoration is null)
+            if (decorationType == "Ornament")
+
             {
-                throw new InvalidOperationException(ExceptionMessages.InvalidDecorationType);
+                decoration = new Ornament();
+            }
+            else if (decorationType == "Plant")
+            {
+                decoration = new Plant();
+            }
+            else
+            {
+                throw new ArgumentException(ExceptionMessages.InvalidDecorationType);
             }
 
             this.decorations.Add(decoration);
 
-            return string.Format(OutputMessages.SuccessfullyAdded, decorationType);
+            return $"Successfully added {decorationType}.";
         }
 
         public string AddFish(string aquariumName, string fishType, string fishName, string fishSpecies, decimal price)
@@ -109,22 +106,23 @@
 
         public string CalculateValue(string aquariumName)
         {
-            var aquarium = this.aquariums.FirstOrDefault(a => a.Name == aquariumName);
+            var aquarium = this.aquariums.FirstOrDefault(x => x.Name == aquariumName);
 
-            var sum = aquarium.Fish.Sum(f => f.Price) + aquarium.Decorations.Sum(d => d.Price);
+            var fishPrice = aquarium.Fish.Sum(x => x.Price);
+            var decorationPrice = aquarium.Decorations.Sum(x => x.Price);
 
-            return string.Format(OutputMessages.AquariumValue, aquariumName, sum);
+            var result = fishPrice + decorationPrice;
+
+            return $"The value of Aquarium {aquariumName} is {result:f2}.";
         }
 
         public string FeedFish(string aquariumName)
         {
-            var aquarium = this.aquariums.FirstOrDefault(a => a.Name == aquariumName);
+            var aquarium = this.aquariums.FirstOrDefault(x => x.Name == aquariumName);
 
             aquarium.Feed();
-
-            var fishCount = aquarium.Fish.Count;
-
-            return string.Format(OutputMessages.FishFed, fishCount);
+            var count = aquarium.Fish.Count();
+            return $"Fish fed: {count}";
         }
 
         public string InsertDecoration(string aquariumName, string decorationType)
@@ -135,25 +133,28 @@
             {
                 throw new InvalidOperationException(string.Format(ExceptionMessages.InexistentDecoration, decorationType));
             }
-
-            var aquarium = this.aquariums.FirstOrDefault(a => a.Name == aquariumName);
+            var aquarium = this.aquariums.FirstOrDefault(x => x.Name == aquariumName);
 
             aquarium.AddDecoration(decoration);
             this.decorations.Remove(decoration);
 
-            return string.Format(OutputMessages.EntityAddedToAquarium, decorationType, aquariumName);
+            return $"Successfully added {decorationType} to {aquariumName}.";
         }
 
         public string Report()
         {
-            var sb = new StringBuilder();
-
-            foreach (var aquarium in this.aquariums)
+            StringBuilder sb = new StringBuilder();
+            foreach (var aquaruim in aquariums)
             {
-                sb.AppendLine(aquarium.GetInfo());
+                sb.AppendLine(aquaruim.GetInfo());
             }
 
             return sb.ToString().TrimEnd();
+        }
+
+        public void Exit()
+        {
+            Environment.Exit(0);
         }
     }
 }

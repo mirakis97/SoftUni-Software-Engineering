@@ -1,37 +1,29 @@
-﻿namespace AquaShop.Models.Aquariums
-{
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Text;
+﻿using AquaShop.Models.Aquariums.Contracts;
+using AquaShop.Models.Decorations.Contracts;
+using AquaShop.Models.Fish.Contracts;
+using AquaShop.Utilities.Messages;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 
-    using Aquariums.Contracts;
-    using Decorations.Contracts;
-    using Fish.Contracts;
-    using Utilities.Messages;
+namespace AquaShop.Models.Aquariums
+{
 
     public abstract class Aquarium : IAquarium
     {
-        private readonly ICollection<IDecoration> decorations;
-        private readonly ICollection<IFish> fish;
         private string name;
-
-        protected Aquarium(int capacity, string name)
+        private ICollection<IDecoration> decorations;
+        private ICollection<IFish> fish;
+        private int currCapacity;
+        protected Aquarium(string name, int capacity)
         {
-            this.Capacity = capacity;
             this.Name = name;
+            this.Capacity = capacity;
+            this.currCapacity = 0;
             this.decorations = new List<IDecoration>();
             this.fish = new List<IFish>();
         }
-
-        public int Capacity { get; }
-
-        public int Comfort => this.Decorations.Sum(d => d.Comfort);
-
-        public ICollection<IDecoration> Decorations => this.decorations.ToList().AsReadOnly();
-
-        public ICollection<IFish> Fish => this.fish.ToList().AsReadOnly();
-
         public string Name
         {
             get => this.name;
@@ -41,26 +33,36 @@
                 {
                     throw new ArgumentException(ExceptionMessages.InvalidAquariumName);
                 }
-
                 this.name = value;
             }
         }
 
-        public void AddDecoration(IDecoration decoration) => this.decorations.Add(decoration);
+        public int Capacity { get; private set; }
+
+        public int Comfort => this.Decorations.Sum(x => x.Comfort);
+
+        public ICollection<IDecoration> Decorations => this.decorations.ToList().AsReadOnly();
+
+        public ICollection<IFish> Fish => this.fish;
+
+        public void AddDecoration(IDecoration decoration)
+        {
+            this.decorations.Add(decoration);
+        }
 
         public void AddFish(IFish fish)
         {
-            if (this.Fish.Count + 1 > this.Capacity)
+            currCapacity++;
+            if (this.Capacity == this.currCapacity)
             {
                 throw new InvalidOperationException(ExceptionMessages.NotEnoughCapacity);
             }
-
             this.fish.Add(fish);
         }
 
         public void Feed()
         {
-            foreach (var fish in this.Fish)
+            foreach (var fish in fish)
             {
                 fish.Eat();
             }
@@ -68,11 +70,10 @@
 
         public string GetInfo()
         {
-            var sb = new StringBuilder();
+            StringBuilder sb = new StringBuilder();
 
-            sb.AppendLine($"{this.Name} ({this.GetType().Name}):");
-
-            if (this.Fish.Count == 0)
+            sb.AppendLine($"{this.Name} ({GetType().Name}):");
+            if (!this.fish.Any())
             {
                 sb.AppendLine("Fish: none");
             }
@@ -80,13 +81,20 @@
             {
                 sb.AppendLine($"Fish: {string.Join(", ", this.Fish.Select(f => f.Name))}");
             }
-
             sb.AppendLine($"Decorations: {this.Decorations.Count}");
             sb.AppendLine($"Comfort: {this.Comfort}");
 
             return sb.ToString().TrimEnd();
         }
 
-        public bool RemoveFish(IFish fish) => this.Fish.Remove(fish);
+        public bool RemoveFish(IFish fish)
+        {
+            if (!this.fish.Any(x => x.GetType().Name == fish.GetType().Name))
+            {
+                return false;
+            }
+            this.fish.Remove(fish);
+            return true;
+        }
     }
 }
