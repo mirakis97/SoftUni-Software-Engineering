@@ -1,0 +1,16 @@
+{
+  "name": "Pizza-place",
+  "version": "1.0.0",
+  "description": "",
+  "main": "piza.js",
+  "scripts": {
+    "test": "chai"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "chai": "^4.3.4",
+    "mocha": "^9.0.1"
+  }
+}
