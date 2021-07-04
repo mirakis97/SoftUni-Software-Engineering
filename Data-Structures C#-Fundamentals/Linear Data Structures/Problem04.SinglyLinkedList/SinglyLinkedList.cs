@@ -6,108 +6,127 @@
 
     public class SinglyLinkedList<T> : IAbstractLinkedList<T>
     {
-        private Node<T> _head;
-        public Node<T> Head { get { return _head; } set { } }
-        public Node<T> Last { get; set; }
-        
+     
+        private Node<T> head;
+        private Node<T> tail;
+
 
         public int Count { get; private set; }
 
         public void AddFirst(T item)
         {
-            Node<T> newHead = new Node<T>(item);
-            newHead.Next = Head;
-            if (Head == null)
+            if (this.Count == 0)
             {
-                Last = newHead;
+                this.head = this.tail = new Node<T>(item);
             }
-            Head = newHead;
-            Count++;
+            else
+            {
+                var newHead = new Node<T>(item);
+                newHead.NextNode = this.head;
+                this.head.PrevNode = newHead;
+
+                this.head = newHead;
+            }
+            this.Count++;
         }
 
         public void AddLast(T item)
         {
-            if (Head == null)
+            if (this.Count == 0)
             {
-                Head = new Node<T>(item);
-                Head.Next = null;
+                this.head = this.tail = new Node<T>(item);
             }
             else
             {
-                Node<T> toAdd = new Node<T>(item);
-
-                Node<T> current = Head;
-
-                while (current.Next != null)
-                {
-                    current = current.Next;
-                }
-                current.Next = toAdd;
+                var newTail = new Node<T>(item);
+                newTail.PrevNode = this.tail;
+                this.tail.NextNode = newTail;
+                this.tail = newTail;
             }
-            Count++;
+            this.Count++;
         }
 
         public T GetFirst()
         {
-            T temp = default(T);
-
-            Node<T> curr = Head;
-
-            while (curr != null)
+            if (this.Count == 0)
             {
-                temp = curr.Value;
-                curr = curr.Next;
+                throw new InvalidOperationException("List empty");
             }
-
-            return temp;
+            return head.Value;
         }
 
         public T GetLast()
         {
-            T lastElement = default(T);
-            Node<T> curr = Last;
-            while (curr != null)
+            if (this.Count == 0)
             {
-                lastElement = curr.Value;
-                curr = curr.Next;
+                throw new InvalidOperationException("List empty");
+            }
+            Node<T> currentNode = head;
+
+            while (currentNode.NextNode != null)
+            {
+                currentNode = currentNode.NextNode;
             }
 
-            return lastElement;
+            return currentNode.Value;
         }
 
         public T RemoveFirst()
         {
-            T oldHead = Head.Value;
-            Head = Head.Next;
-            if (Head == null)
+            if (this.Count == 0)
             {
-                Last = null;
+                throw new InvalidOperationException("List empty");
             }
-            return oldHead;
+
+            var firstelement = this.head.Value;
+            this.head = this.head.NextNode;
+            if (this.head != null)
+            {
+                this.head.PrevNode = null;
+            }
+            else
+            {
+                this.tail = null;
+            }
+
+            this.Count--;
+            return firstelement;
         }
 
         public T RemoveLast()
         {
-            T oldHead = Last.Value;
-            Last = Last.Next;
-            if (Head == null)
+            if (this.Count == 0)
             {
-                Last = null;
+                throw new InvalidOperationException("List empty");
             }
-            return oldHead;
+            var lastElement = this.tail.Value;
+            this.tail = this.tail.PrevNode;
+            if (this.tail != null)
+            {
+                this.tail.NextNode = null;
+            }
+            else
+            {
+                this.head = null;
+            }
+
+            this.Count--;
+            return lastElement;
         }
 
         public IEnumerator<T> GetEnumerator()
         {
-            var current = Head;
+            var current = head;
             while (current != null)
             {
                 yield return current.Value;
-                current = current.Next;
+                current = current.NextNode;
             }
         }
 
         IEnumerator IEnumerable.GetEnumerator()
-            => this.GetEnumerator();
+        {
+            return this.GetEnumerator();
+        }
     }
 }

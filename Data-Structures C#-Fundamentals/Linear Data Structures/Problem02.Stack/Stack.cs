@@ -8,20 +8,23 @@
     {
         private Node<T> top;
         private int size;
-        public Stack()
-        {
-            
-        }
+        
         public int Count { get; private set; }
 
         public bool Contains(T item)
         {
-            throw new NotImplementedException();
+            
+            return true;
         }
 
         public T Peek()
         {
-            throw new NotImplementedException();
+            if (this.Count == 0)
+            {
+                throw new InvalidOperationException();
+            }
+
+            return this.top.Element;
         }
 
         public T Pop()
@@ -38,7 +41,10 @@
 
         private void EnsureNonEmpty()
         {
-            throw new NotImplementedException();
+            if (this.Count == 0)
+            {
+                throw new InvalidOperationException();
+            }
         }
 
         public void Push(T item)
@@ -54,7 +60,9 @@
             throw new NotImplementedException();
         }
 
-        IEnumerator IEnumerable.GetEnumerator() 
-            => throw new NotImplementedException();
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return this.GetEnumerator();
+        }
     }
 }
