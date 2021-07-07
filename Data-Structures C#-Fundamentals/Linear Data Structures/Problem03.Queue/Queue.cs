@@ -6,63 +6,86 @@
 
     public class Queue<T> : IAbstractQueue<T>
     {
-        private int size;
-        private Node<T> head;
-        private Node<T> tail;
+        private Node<T> _head;
 
         public int Count { get; private set; }
 
-
         public bool Contains(T item)
         {
-            throw new NotImplementedException();
+            var current = this._head;
+
+            while (current != null)
+            {
+                if (current.Value.Equals(item))
+                {
+                    return true;
+                }
+
+                current = current.NextNode;
+            }
+
+            return false;
         }
 
         public T Dequeue()
         {
-            if (this.Count == 0)
-            {
-                throw new InvalidOperationException();
-            }
-            T value = this.head.Value;
-            this.head = this.head.NextNode;
+            this.EnsureNotEmpty();
+
+            var headItem = this._head.Value;
+            var newHead = this._head.NextNode;
+            this._head.NextNode = null;
+            this._head = newHead;
 
             this.Count--;
 
-            return value;
+            return headItem;
         }
 
         public void Enqueue(T item)
         {
-            if (this.head == null)
+            var newNode = new Node<T>(item);
+
+            if (this._head is null)
             {
-                this.head = new Node<T>(item);
-                this.head.Value = item;
-                this.tail = this.head;
+                this._head = newNode;
             }
             else
             {
-                var newNode = new Node<T>(item);
-                newNode.Value = item;
+                var current = this._head;
 
-                this.tail.NextNode = newNode;
-                //newNode.Prev = this.tail;
-                this.tail = newNode;
+                while (current.NextNode != null)
+                    current = current.NextNode;
+
+                current.NextNode = newNode;
             }
+
             this.Count++;
         }
 
         public T Peek()
         {
-            throw new NotImplementedException();
+            this.EnsureNotEmpty();
+
+            return this._head.Value;
         }
 
         public IEnumerator<T> GetEnumerator()
         {
-            throw new NotImplementedException();
+            var current = this._head;
+            while (current != null)
+            {
+                yield return current.Value;
+                current = current.NextNode;
+            }
         }
 
         IEnumerator IEnumerable.GetEnumerator()
-            => throw new NotImplementedException();
+            => this.GetEnumerator();
+
+        private void EnsureNotEmpty()
+        {
+            if (this.Count == 0)
+                throw new InvalidOperationException();
+        }
     }
 }
