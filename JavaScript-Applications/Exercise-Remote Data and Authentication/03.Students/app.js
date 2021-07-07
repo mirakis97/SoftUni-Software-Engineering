@@ -26,8 +26,8 @@ async function createStudent(event) {
     }
     await fetch("http://localhost:3030/jsonstore/collections/students", {
         method: 'post',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(newStudent)
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(newStudent)
     });
 
     event.target.parentNode.reset();
