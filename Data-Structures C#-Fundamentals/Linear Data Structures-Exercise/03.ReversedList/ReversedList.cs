@@ -28,7 +28,7 @@
             get
             {
                 this.ValidateIndex(index);
-                return this._items[index];
+                return this._items[this.Count - index - 1];
             }
             set
             {
@@ -77,7 +77,7 @@
             {
                 if (this._items[i].Equals(item))
                 {
-                    return i;
+                    return this.Count - i - 1;
                 }
             }
             return -1;
@@ -87,43 +87,47 @@
         {
             this.ValidateIndex(index);
             this.GrowIfNecessary();
-            for (int i = this.Count; i > index; i--)
+            int indexToInsert = this.Count - index;
+
+            for (int i = this.Count; i > indexToInsert; i--)
             {
                 this._items[i] = this._items[i - 1];
             }
 
-            this._items[index] = item;
-            this.index++;
+            this._items[indexToInsert] = item;
+            this.Count++;
         }
 
         public bool Remove(T item)
         {
-            if (this._items.Contains(item))
+            int indexOfElement = this.IndexOf(item);
+            if (indexOfElement == -1)
             {
-                return true;
+                return false;
             }
-
+            this.RemoveAt(indexOfElement);
             return false;
         }
 
         public void RemoveAt(int index)
         {
             this.ValidateIndex(index);
-            for (int i = index; i < this.Count; i++)
+            int indexOfElement = this.Count - 1 - index;
+            for (int i = indexOfElement; i < this.Count - 1; i++)
             {
                 this._items[i] = this._items[i + 1];
             }
 
-            this._items[this.index + 1] = default;
-            this.index--;
+            this._items[this.Count - 1] = default;
+            this.Count--;
         }
         
 
-        public void ValidateIndex(int index)
+        private void ValidateIndex(int index)
         {
-            if (index < 0 || index >= this.index)
+            if (index < 0 || index >= this.Count)
             {
-                throw new IndexOutOfRangeException(nameof(index));
+                throw new IndexOutOfRangeException();
             }
         }
 

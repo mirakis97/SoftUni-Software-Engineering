@@ -7,46 +7,39 @@
     {
         public bool AreBalanced(string parentheses)
         {
-            var stack = new stack();
+            if (string.IsNullOrEmpty(parentheses) || parentheses.Length % 2 == 1)
+            {
+                return false;
+            }
 
-            return stack.isEmoty;
+            Stack<char> breckets = new Stack<char>(parentheses.Length / 2);
+
+            foreach (char currBrecket in parentheses)
+            {
+                char expectedBrecket = default;
+                switch (currBrecket)
+                {
+                    case ')':
+                        expectedBrecket = '(';
+                        break;
+                    case ']':
+                        expectedBrecket = '[';
+                        break;
+                    case '}':
+                        expectedBrecket = '{';
+                        break;
+                    default:
+                        breckets.Push(currBrecket);
+                        break;
+                }
+                if (expectedBrecket != default && breckets.Pop() != expectedBrecket)
+                {
+                    return false;
+                }
+               
+            }
+            return breckets.Count == 0;
         }
     }
-    public class stack
-    {
-        public int top = -1;
-        public char[] items = new char[100];
 
-        public void push(char x)
-        {
-            if (top == 99)
-            {
-                Console.WriteLine("Stack full");
-            }
-            else
-            {
-                items[++top] = x;
-            }
-        }
-
-        char pop()
-        {
-            if (top == -1)
-            {
-                Console.WriteLine("Underflow error");
-                return '\0';
-            }
-            else
-            {
-                char element = items[top];
-                top--;
-                return element;
-            }
-        }
-
-        Boolean isEmpty()
-        {
-            return (top == -1) ? true : false;
-        }
-    }
 }
