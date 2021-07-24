@@ -1,5 +1,5 @@
 import { html } from "../../node_modules/lit-html/lit-html.js";
-import { login } from "../helpers/api.js";
+import { login } from "../helpers/data.js";
 
 const loginTemplate = (onSubmit, invalidEmail, invalidPass) =>
     html`

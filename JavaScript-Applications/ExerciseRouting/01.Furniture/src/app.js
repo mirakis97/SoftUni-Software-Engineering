@@ -1,8 +1,7 @@
-import * as api from './helpers/data.js';
-import { render } from '../node_modules/lit-html/lit-html/js'
-import page from '//unpkg.com/page/page.mjs';
-import { logout } from './helpers/data.js';
+import { render } from '../node_modules/lit-html/lit-html.js'
+import page from '../node_modules/page/page.mjs';
 
+import { logout } from './helpers/data.js';
 import { loginPage } from "./logic/login.js";
 import { registerPage } from "./logic/register.js";
 import { dashboardPage } from "./logic/dashboard.js";
@@ -14,6 +13,7 @@ import { myFurniturePage } from "./logic/myFurniture.js";
 const conteiner = document.querySelector('.container');
 
 page('/',renderMid,dashboardPage);
+page('/dashboard',renderMid,dashboardPage);
 page('/login',renderMid,loginPage);
 page('/register',renderMid,registerPage);
 page('/create',renderMid,createPage);
@@ -21,11 +21,19 @@ page('/details/:id',renderMid,detailsPage);
 page('/edit/:id',renderMid,editPage);
 page('/my-furniture',renderMid,myFurniturePage);
 
+document.getElementById('logoutBtn').addEventListener('click', async() =>{
+    await logout();
+    setUserNav();
+    page.redirect('/');
+    console.log(sessionStorage.length);
+    
+});
+setUserNav();
 page.start();
 
 function renderMid(context,next) {
-    context.setUserNav = setUserNav;
     context.render = (context) => render(context,conteiner);
+    context.setUserNav = setUserNav;
     next();
 }
 
@@ -40,9 +48,3 @@ export function setUserNav() {
     }
 }
 
-document.getElementById('logoutBtn').addEventListener('click', async() =>{
-    await logout();
-    page.redirect('/');
-    console.log(sessionStorage.length);
-    setUserNav;
-});
