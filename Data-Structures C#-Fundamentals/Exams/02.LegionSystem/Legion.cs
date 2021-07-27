@@ -2,45 +2,76 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
+    
     using _02.LegionSystem.Interfaces;
 
     public class Legion : IArmy
     {
-        public int Size => throw new NotImplementedException();
+        private HashSet<IEnemy> warriors;
+        public Legion()
+        {
+            warriors = new HashSet<IEnemy>();
+        }
+        public int Size => warriors.Count;
 
         public bool Contains(IEnemy enemy)
         {
-            throw new NotImplementedException();
+            if (!this.warriors.Contains(enemy))
+            {
+                return true;
+            }
+            return false;
         }
 
         public void Create(IEnemy enemy)
         {
-            throw new NotImplementedException();
+            warriors.Add(enemy);
         }
 
         public IEnemy GetByAttackSpeed(int speed)
         {
-            throw new NotImplementedException();
+            IEnemy enemy = null;
+            foreach (var attackSpeed in warriors)
+            {
+                if (attackSpeed.AttackSpeed == speed)
+                {
+                    enemy = attackSpeed;
+                }
+            }
+            return enemy;
         }
 
         public List<IEnemy> GetFaster(int speed)
         {
-            throw new NotImplementedException();
+            List<IEnemy> result = this.warriors.Where(e => e.AttackSpeed > speed).ToList();
+
+            return result;
         }
 
         public IEnemy GetFastest()
         {
-            throw new NotImplementedException();
+            if (warriors.Any())
+            {
+                throw new InvalidOperationException("Legion has no enemies!");
+            }
         }
 
         public IEnemy[] GetOrderedByHealth()
         {
-            throw new NotImplementedException();
+            var enemies = new HashSet<IEnemy>();
+            foreach (var enemy in warriors.OrderByDescending(a => a.Health))
+            {
+                enemies.Add(enemy);
+            }
+            return enemies.ToArray();
         }
 
         public List<IEnemy> GetSlower(int speed)
         {
-            throw new NotImplementedException();
+            List<IEnemy> result = this.warriors.Where(e => e.AttackSpeed < speed).ToList();
+
+            return result;
         }
 
         public IEnemy GetSlowest()
@@ -56,6 +87,14 @@
         public void ShootSlowest()
         {
             throw new NotImplementedException();
+        }
+
+        private void EnsureNotEmpty()
+        {
+            if (this.Size == 0)
+            {
+                throw new InvalidOperationException("Legion has no enemies!");
+            }
         }
     }
 }
