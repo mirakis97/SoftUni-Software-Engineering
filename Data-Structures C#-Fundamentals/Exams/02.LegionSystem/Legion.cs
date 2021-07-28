@@ -8,10 +8,10 @@
 
     public class Legion : IArmy
     {
-        private HashSet<IEnemy> warriors;
+        private LinkedList<IEnemy> warriors;
         public Legion()
         {
-            warriors = new HashSet<IEnemy>();
+            warriors = new LinkedList<IEnemy>();
         }
         public int Size => warriors.Count;
 
@@ -26,7 +26,7 @@
 
         public void Create(IEnemy enemy)
         {
-            warriors.Add(enemy);
+            warriors.AddFirst(enemy);
         }
 
         public IEnemy GetByAttackSpeed(int speed)
@@ -51,10 +51,8 @@
 
         public IEnemy GetFastest()
         {
-            if (warriors.Any())
-            {
-                throw new InvalidOperationException("Legion has no enemies!");
-            }
+             this.EnsureNotEmpty();
+            return warriors.First();
         }
 
         public IEnemy[] GetOrderedByHealth()
@@ -76,22 +74,25 @@
 
         public IEnemy GetSlowest()
         {
-            throw new NotImplementedException();
+            this.EnsureNotEmpty();
+            return warriors.Last();
         }
 
         public void ShootFastest()
         {
-            throw new NotImplementedException();
+            this.EnsureNotEmpty();
+            warriors.RemoveLast();
         }
 
         public void ShootSlowest()
         {
-            throw new NotImplementedException();
+            this.EnsureNotEmpty();
+            warriors.RemoveFirst();
         }
 
         private void EnsureNotEmpty()
         {
-            if (this.Size == 0)
+            if (this.warriors.Count == 0)
             {
                 throw new InvalidOperationException("Legion has no enemies!");
             }

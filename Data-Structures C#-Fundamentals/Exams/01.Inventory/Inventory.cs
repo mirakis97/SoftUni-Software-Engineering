@@ -56,7 +56,7 @@
             var index = this.FindById(weapon.Id);
             this.EnsureIndexIsCorrect(index.Id);
 
-            if (weapons[index.Id].Ammunition - ammunition >= 0)
+            if (weapons[index.Id].Ammunition >= ammunition)
             {
                 weapons[index.Id].Ammunition -= ammunition;
                 return true;
@@ -127,11 +127,11 @@
         {
             List<IWeapon> inBount = new List<IWeapon>();
 
-            for (int i = 0; i < weapons.Count; i++)
+            foreach (var weapon in weapons)
             {
-                if (weapons[i].Category >= lower && weapons[i].Category <= upper)
+                if (weapon.Category >= lower && weapon.Category <= upper)
                 {
-                    inBount.Add(weapons[i]);
+                    inBount.Add(weapon);
                 }
             }
             return inBount;
