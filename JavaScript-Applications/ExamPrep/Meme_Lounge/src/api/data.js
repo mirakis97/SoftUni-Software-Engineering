@@ -22,7 +22,7 @@ export async function getMyMemes() {
 }
 
 export async function createRecord(data) {
-    return await api.post(host + 'data/memes',data);
+    return await api.post(host + '/data/memes/',data);
 }
 export async function editRecord(id,data) {
     return await api.put(host + '/data/memes/' + id, data);

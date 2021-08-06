@@ -4,8 +4,8 @@ import { notify } from "../messages.js";
 
 const loginTemplate = (onSubmit) => html`
 <section id="login">
-    <form id="login-form">
-        <div class="container" @submit=${onSubmit}>
+    <form @submit=${onSubmit} id="login-form">
+        <div class="container">
             <h1>Login</h1>
             <label for="email">Email</label>
             <input id="email" placeholder="Enter Email" name="email" type="text">
@@ -30,13 +30,16 @@ export async function loginPage(ctx) {
         const password = formData.get('password').trim();
 
         try {
-            if (email == '' || password == '') {
-                throw new Error('All fields are required!')
+            if (!email || !password) {
+
+                throw new Error('All fields are required!');
             }
-            await login(email,password);
+
+            await login(email, password);
+
             ctx.setUserNav();
             ctx.page.redirect('/catalog');
-            
+
         } catch (err) {
             notify(err.message);
         }
