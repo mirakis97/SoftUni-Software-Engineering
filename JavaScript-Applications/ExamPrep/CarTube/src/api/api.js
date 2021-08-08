@@ -61,7 +61,7 @@ export async function del(url) {
 
 export async function login(username, password) {
     const result = await post(settings.host + '/users/login', { username, password });
-    setUserData(result);
+    sessionStorage.setItem('user', JSON.stringify(result));
     return result;
 }
 

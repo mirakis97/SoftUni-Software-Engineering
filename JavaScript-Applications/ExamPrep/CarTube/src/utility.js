@@ -1,3 +1,4 @@
+  
 export function getUserData() {
     const user = sessionStorage.getItem('user');
 
@@ -8,10 +9,11 @@ export function getUserData() {
     }
 }
 
-export function setUserData(user) {
-    sessionStorage.setItem('user', JSON.stringify(user))
+
+export async function setUserData(data) {
+    sessionStorage.setItem('user', JSON.stringify(data));
 }
 
-export function clearUserData(){
+export async function clearUserData() {
     sessionStorage.removeItem('user');
 }
