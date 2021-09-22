@@ -1,0 +1,2 @@
+SELECT COUNT(Salary) FROM Employees AS E
+WHERE e.ManagerID IS NULL
