@@ -67,9 +67,111 @@ INSERT INTO Trips VALUES
 
 --03. Update
 UPDATE Rooms
-SET Price *= 0.14
+SET Price *= 1.14
 WHERE HotelId = 5 OR HotelId = 7 OR HotelId = 9
 
 --04. Delete
-DELETE FROM AccountsTrips
+DELETE 
+	FROM AccountsTrips
 WHERE AccountId = 47
+--05.
+
+SELECT acc.FirstName,acc.LastName,FORMAT(acc.BirthDate,'MM-dd-yyyy'),c.Name AS Hometown, acc.Email FROM Accounts AS acc
+JOIN Cities AS c ON c.Id = acc.CityId
+WHERE Email LIKE 'e%'
+ORDER BY c.Name ASC
+
+--6. City Statistics
+SELECT c.Name,COUNT(h.Id) AS Hotels FROM Cities AS c
+JOIN Hotels AS h ON c.Id = h.CityId
+GROUP BY c.Name
+ORDER BY Hotels DESC , c.Name 
+--07. Longest and Shortest Trips
+SELECT AccountId,
+	   FirstName + ' ' + LastName AS FullName,
+	   MAX(DATEDIFF(DAY,ArrivalDate,ReturnDate)) AS LongestTrip,
+	   MIN(DATEDIFF(DAY,ArrivalDate,ReturnDate)) AS ShortestTrip
+FROM AccountsTrips AS act
+JOIN Accounts AS acc ON  act.AccountId = acc.Id 
+JOIN Trips AS t ON act.TripId = t.Id
+WHERE acc.MIddleName IS NULL AND t.CancelDate IS NULL
+GROUP BY AccountId,FirstName ,LastName
+ORDER BY LongestTrip DESC,ShortestTrip 
+
+--8. Metropolis
+SELECT TOP(10) c.Id, c.Name,c.CountryCode AS Country,COUNT(acc.Id) FROM Cities AS c
+JOIN Accounts AS acc ON acc.CityId = c.Id
+GROUP BY c.Id,c.Name,c.CountryCode
+ORDER BY COUNT(acc.Id) DESC
+--9. Romantic Getaways
+SELECT acc.Id,acc.Email,c.Name AS City, COUNT(*) AS Trips 
+FROM Accounts AS acc
+JOIN AccountsTrips AS act ON act.AccountId = acc.Id
+JOIN Trips AS t ON t.Id = act.TripId
+JOIN Rooms AS r ON r.Id = t.RoomId
+JOIN Hotels AS h ON h.Id = r.HotelId
+JOIN Cities AS c ON c.Id = h.CityId
+WHERE acc.CityId = c.Id
+GROUP BY acc.Id,acc.Email,c.Name
+ORDER BY Trips DESC,acc.Id
+
+--10. GDPR Violation
+SELECT t.Id,
+CASE
+WHEN acc.MIddleName IS NULL THEN CONCAT(acc.FirstName,' ',LastName)
+				ELSE CONCAT(acc.FirstName,+ ' ' + acc.MIddleName,' ',acc.LastName)
+END AS FullName,c.Name AS [From],c2.Name [To],
+CASE
+WHEN t.CancelDate IS NULL THEN CONCAT(DATEDIFF(DAY,T.ArrivalDate, T.ReturnDate), ' ', 'days')
+				ELSE 'Canceled'
+END AS Duration 
+FROM AccountsTrips AS act
+JOIN Accounts AS acc ON act.AccountId = acc.Id
+JOIN Cities AS c ON c.Id = acc.CityId
+JOIN Trips AS t ON t.Id = act.TripId
+JOIN Rooms AS r ON r.Id = t.RoomId
+JOIN Hotels AS h ON h.Id = r.HotelId
+JOIN Cities AS c2 ON c2.Id = h.CityId
+ORDER BY FullName, T.Id
+
+
+
+--11. Available Room
+
+CREATE FUNCTION udf_GetAvailableRoom(@HotelId INT, @Date DATETIME, @People INT) 
+  RETURNS NVARCHAR(200)
+AS 
+	BEGIN
+	DECLARE @RoomId INT = (SELECT TOP(1) R.Id 
+							   FROM Trips AS T
+								JOIN Rooms  AS R ON R.Id = T.RoomId
+								JOIN Hotels AS H ON H.Id = R.HotelId
+								   WHERE H.Id = @HotelId 
+								   AND @Date NOT BETWEEN T.ArrivalDate AND T.ReturnDate
+								   AND T.CancelDate IS NULL
+								   AND R.Beds >= @People
+								   AND YEAR(@Date) = YEAR(t.ArrivalDate)
+								   ORDER BY R.Price DESC)
+	IF(@RoomId IS NULL)
+	RETURN 'No rooms available'
+
+	DECLARE @RoomType NVARCHAR(20) = (SELECT [Type]
+										    FROM Rooms
+										    WHERE Id = @RoomId)
+
+	DECLARE @Beds INT              = (SELECT R.Beds 
+										    FROM Rooms AS R 
+										    WHERE R.Id = @RoomId)
+
+	DECLARE @HotelBaseRate DECIMAL(15,2) = (SELECT H.BaseRate 
+										    FROM Hotels AS H 
+										    WHERE H.Id = @HotelId)
+
+	DECLARE @RoomPrice DECIMAL(18,2)     = (SELECT R.Price 
+										    FROM Rooms AS R
+										    WHERE R.Id = @RoomId)
+
+	DECLARE @TotalPrice DECIMAL(18,2)    = (@HotelBaseRate + @RoomPrice) * @People
+
+	RETURN CONCAT('Room',' ',@RoomId,':',' ',@RoomType,' ','(',@Beds,' ','beds',')',' ','-',' ','$',@TotalPrice )
+	END
