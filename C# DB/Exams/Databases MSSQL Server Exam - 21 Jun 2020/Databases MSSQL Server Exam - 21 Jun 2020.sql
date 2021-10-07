@@ -175,3 +175,45 @@ AS
 
 	RETURN CONCAT('Room',' ',@RoomId,':',' ',@RoomType,' ','(',@Beds,' ','beds',')',' ','-',' ','$',@TotalPrice )
 	END
+
+	--12.
+
+CREATE OR ALTER PROCEDURE usp_SwitchRoom(@TripId INT, @TargetRoomId INT)
+AS
+BEGIN
+	DECLARE @SelectedTrip INT = (SELECT h.Id
+								FROM Trips AS t
+								JOIN Rooms AS r ON r.Id = t.RoomId
+								JOIN Hotels AS h ON h.Id = r.HotelId
+								WHERE t.Id = @TripId)
+
+	DECLARE @SelectedRoom INT = (SELECT HotelId
+									FROM Rooms 						
+									WHERE Id = @TargetRoomId);
+
+	IF(@SelectedTrip != @SelectedRoom)
+	BEGIN
+	THROW 50001,'Target room is in another hotel!',1
+	END
+
+	DECLARE @TipsForAccount INT = (SELECT COUNT(AccountId) FROM AccountsTrips
+	WHERE TripId = @TripId)
+
+	DECLARE @BedsInTargedRoom INT = (SELECT r.Beds FROM Rooms AS r
+	WHERE r.Id = @TargetRoomId)
+
+	
+	IF(@TipsForAccount > @BedsInTargedRoom)
+	BEGIN
+	THROW 50002,'Not enough beds in target room!',2
+	END
+	UPDATE Trips
+	SET RoomId =@TargetRoomId
+	WHERE Id = @TripId
+END
+
+EXEC usp_SwitchRoom 10, 11
+SELECT RoomId FROM Trips WHERE Id = 10
+
+EXEC usp_SwitchRoom 10, 7
+EXEC usp_SwitchRoom 10, 8
