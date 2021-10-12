@@ -25,3 +25,44 @@ JOIN Commits AS c ON r.Id = c.RepositoryId
 JOIN RepositoriesContributors AS rc ON rc.RepositoryId = r.Id
 GROUP BY r.Id,r.Name
 ORDER BY Commits DESC,r.Id ASC,r.Name 
+
+--10.	Average Size
+
+SELECT u.Username,AVG(f.Size) AS Size FROM Users AS u
+JOIN Commits AS c ON u.Id = c.ContributorId
+JOIN Files AS f ON c.Id = f.CommitId
+GROUP BY u.Username
+ORDER BY AVG(f.Size) DESC,u.Username ASC
+
+--11. All User Commits
+
+CREATE FUNCTION udf_AllUserCommits(@username VARCHAR(30))
+RETURNS INT AS
+BEGIN
+DECLARE @returnvalue INT;
+
+SELECT  @returnvalue = COUNT(c.Id) FROM Users AS u
+JOIN Commits AS c ON u.Id = c.ContributorId
+WHERE u.Username = @username
+
+RETURN @returnvalue
+END
+--
+
+SELECT dbo.udf_AllUserCommits('UnderSinduxrein')
+
+--12. Search for Files
+/*
+Create a user defined stored procedure, named usp_SearchForFiles(@fileExtension), that receives files extensions.
+The procedure must print the id, name and size of the file. Add "KB" in the end of the size. Order them by id (ascending), file name (ascending) and file size (descending)
+
+*/
+CREATE PROC usp_SearchForFiles(@fileExtension VARCHAR(30))
+AS
+	SELECT Id,Name,CONCAT(Size , 'KB') AS Size FROM Files 
+	WHERE Name LIKE '%' + @fileExtension
+GO
+
+
+
+EXEC usp_SearchForFiles 'txt'
