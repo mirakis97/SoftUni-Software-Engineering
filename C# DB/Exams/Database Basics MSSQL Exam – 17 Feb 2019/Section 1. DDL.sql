@@ -1,0 +1,60 @@
+CREATE DATABASE School
+USE School
+
+CREATE TABLE Students
+(
+	Id INT PRIMARY KEY IDENTITY,
+	FirstName NVARCHAR(30) NOT NULL,
+	MiddleName  NVARCHAR(25),
+	LastName NVARCHAR(30) NOT NULL,
+	Age INT CHECK(Age >=5 AND Age  <= 100),
+	[Address] NVARCHAR(50),
+	Phone CHAR(10)
+)
+
+CREATE TABLE Subjects
+(
+	Id INT PRIMARY KEY IDENTITY,
+	[Name]  NVARCHAR(20) NOT NULL,
+	Lessons INT CHECK(Lessons > 0) NOT NULL
+)
+
+CREATE TABLE StudentsSubjects
+(
+	Id INT PRIMARY KEY IDENTITY,
+	StudentId INT REFERENCES Students(Id) NOT NULL,
+	SubjectId INT REFERENCES Subjects(Id) NOT NULL,
+	Grade DECIMAL(16,2) CHECK(Grade BETWEEN 2 AND 6) NOT NULL
+)
+
+CREATE TABLE Exams
+(
+	Id INT PRIMARY KEY IDENTITY,
+	[Date] DATETIME,
+	SubjectId INT REFERENCES Subjects(Id) NOT NULL
+)
+
+CREATE TABLE StudentsExams
+(
+	StudentId INT REFERENCES Students(Id) NOT NULL,
+	ExamId INT REFERENCES Exams(Id) NOT NULL,
+	Grade DECIMAL(16,2) CHECK(Grade BETWEEN 2 AND 6) NOT NULL
+		PRIMARY KEY(StudentId,ExamId)
+)
+
+CREATE TABLE Teachers
+(
+	Id INT PRIMARY KEY IDENTITY,
+	FirstName NVARCHAR(20) NOT NULL,
+	LastName NVARCHAR(20) NOT NULL,
+	[Address] NVARCHAR(20) NOT NULL,
+	Phone CHAR(10),
+	SubjectId INT REFERENCES Subjects(Id) NOT NULL
+)
+
+CREATE TABLE StudentsTeachers
+(
+	StudentId INT REFERENCES Students(Id) NOT NULL,
+	TeacherId INT REFERENCES Teachers(Id) NOT NULL,
+		PRIMARY KEY(StudentId,TeacherId)
+)
