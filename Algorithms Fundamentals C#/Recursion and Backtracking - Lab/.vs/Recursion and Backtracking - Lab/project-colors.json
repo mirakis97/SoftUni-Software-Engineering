@@ -1,0 +1,51 @@
+{
+  "Version": 1,
+  "ProjectMap": {
+    "21e406fd-c666-43b7-b207-43070bb80890": {
+      "ProjectGuid": "21e406fd-c666-43b7-b207-43070bb80890",
+      "DisplayName": "01. Recursive Array Sum",
+      "ColorIndex": 0
+    },
+    "d7939c21-c7c9-45f4-ba44-68b67021e5a1": {
+      "ProjectGuid": "d7939c21-c7c9-45f4-ba44-68b67021e5a1",
+      "DisplayName": "ConsoleApp1",
+      "ColorIndex": 1
+    },
+    "d4cdc90d-fcba-4312-8953-7ab3bada4ce8": {
+      "ProjectGuid": "d4cdc90d-fcba-4312-8953-7ab3bada4ce8",
+      "DisplayName": "05. Paths in Labyrinth",
+      "ColorIndex": 2
+    },
+    "e9b6156c-5b68-4b19-b4c3-db86062794a3": {
+      "ProjectGuid": "e9b6156c-5b68-4b19-b4c3-db86062794a3",
+      "DisplayName": "06. 8 Queens Puzzle",
+      "ColorIndex": 3
+    },
+    "5847a1bb-1e6f-4998-bcfc-62950ef72ff2": {
+      "ProjectGuid": "5847a1bb-1e6f-4998-bcfc-62950ef72ff2",
+      "DisplayName": "07. Recursive Fibonacci",
+      "ColorIndex": 4
+    },
+    "f12cd696-9d79-47bb-9b1c-1e8df9f2d3bb": {
+      "ProjectGuid": "f12cd696-9d79-47bb-9b1c-1e8df9f2d3bb",
+      "DisplayName": "1. Recursive Array Sum",
+      "ColorIndex": 5
+    },
+    "bb9bd104-df3f-4f4c-9445-64b761d8da2f": {
+      "ProjectGuid": "bb9bd104-df3f-4f4c-9445-64b761d8da2f",
+      "DisplayName": "02. Recursive Drawing",
+      "ColorIndex": 6
+    },
+    "53dedb5f-9412-4bf0-99e2-2553f7b02f58": {
+      "ProjectGuid": "53dedb5f-9412-4bf0-99e2-2553f7b02f58",
+      "DisplayName": "03. Generating 0-1 Vectors",
+      "ColorIndex": 7
+    },
+    "a2f70b26-c480-4212-8917-1f21134b797e": {
+      "ProjectGuid": "a2f70b26-c480-4212-8917-1f21134b797e",
+      "DisplayName": "04. Recursive Factorial",
+      "ColorIndex": 8
+    }
+  },
+  "NextColorIndex": 9
+}
