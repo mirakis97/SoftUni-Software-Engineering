@@ -1,0 +1,41 @@
+{
+  "Version": 1,
+  "ProjectMap": {
+    "0d7d9397-e5f9-4b07-8655-1a1f339ba75b": {
+      "ProjectGuid": "0d7d9397-e5f9-4b07-8655-1a1f339ba75b",
+      "DisplayName": "01. Binomial Coefficients",
+      "ColorIndex": 0
+    },
+    "72109477-b8f2-4089-9aff-0e6807acb20b": {
+      "ProjectGuid": "72109477-b8f2-4089-9aff-0e6807acb20b",
+      "DisplayName": "02. Dividing Presents",
+      "ColorIndex": 1
+    },
+    "ab41c640-efb1-44e4-83bd-a4f360f8155b": {
+      "ProjectGuid": "ab41c640-efb1-44e4-83bd-a4f360f8155b",
+      "DisplayName": "03. Sum with Unlimited Coins",
+      "ColorIndex": 2
+    },
+    "0b9ff8b1-6e92-46ee-97a8-6261232474c6": {
+      "ProjectGuid": "0b9ff8b1-6e92-46ee-97a8-6261232474c6",
+      "DisplayName": "04. Sum with Limited Coins",
+      "ColorIndex": 3
+    },
+    "ae210260-738f-4289-8509-1cb06e2a5421": {
+      "ProjectGuid": "ae210260-738f-4289-8509-1cb06e2a5421",
+      "DisplayName": "05. Word Differences",
+      "ColorIndex": 4
+    },
+    "bcae3162-bd01-406d-926a-2586c683094e": {
+      "ProjectGuid": "bcae3162-bd01-406d-926a-2586c683094e",
+      "DisplayName": "06. Connecting Cables",
+      "ColorIndex": 5
+    },
+    "3a342578-fbda-40ea-8f68-e99f3c9c93b3": {
+      "ProjectGuid": "3a342578-fbda-40ea-8f68-e99f3c9c93b3",
+      "DisplayName": "07. Minimum Edit Distance",
+      "ColorIndex": 6
+    }
+  },
+  "NextColorIndex": 7
+}
