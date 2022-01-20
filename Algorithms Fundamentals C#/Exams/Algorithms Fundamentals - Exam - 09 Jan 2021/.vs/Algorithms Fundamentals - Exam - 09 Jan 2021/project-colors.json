@@ -1,0 +1,16 @@
+{
+  "Version": 1,
+  "ProjectMap": {
+    "19e3a8f2-e1ae-4e92-b59b-b71dc728d615": {
+      "ProjectGuid": "19e3a8f2-e1ae-4e92-b59b-b71dc728d615",
+      "DisplayName": "01. Super Set",
+      "ColorIndex": 0
+    },
+    "d74af05e-6b36-4dcf-ba5c-181fccaf4081": {
+      "ProjectGuid": "d74af05e-6b36-4dcf-ba5c-181fccaf4081",
+      "DisplayName": "02. Paths",
+      "ColorIndex": 1
+    }
+  },
+  "NextColorIndex": 2
+}
