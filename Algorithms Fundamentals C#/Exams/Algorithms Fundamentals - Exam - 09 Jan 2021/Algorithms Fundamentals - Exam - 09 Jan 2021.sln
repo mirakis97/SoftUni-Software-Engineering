@@ -3,9 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.32014.148
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "01. Super Set", "01. Super Set\01. Super Set.csproj", "{19E3A8F2-E1AE-4E92-B59B-B71DC728D615}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "01. Super Set", "01. Super Set\01. Super Set.csproj", "{19E3A8F2-E1AE-4E92-B59B-B71DC728D615}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "02. Paths", "02. Paths\02. Paths.csproj", "{D74AF05E-6B36-4DCF-BA5C-181FCCAF4081}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "02. Paths", "02. Paths\02. Paths.csproj", "{D74AF05E-6B36-4DCF-BA5C-181FCCAF4081}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "03. Climbing", "03. Climbing\03. Climbing.csproj", "{D94ACB7B-B294-4FE1-876D-59025701763C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{D74AF05E-6B36-4DCF-BA5C-181FCCAF4081}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D74AF05E-6B36-4DCF-BA5C-181FCCAF4081}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D74AF05E-6B36-4DCF-BA5C-181FCCAF4081}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D94ACB7B-B294-4FE1-876D-59025701763C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D94ACB7B-B294-4FE1-876D-59025701763C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D94ACB7B-B294-4FE1-876D-59025701763C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D94ACB7B-B294-4FE1-876D-59025701763C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

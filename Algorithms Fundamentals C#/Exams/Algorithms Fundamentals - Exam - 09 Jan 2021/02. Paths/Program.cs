@@ -11,66 +11,57 @@ namespace _02._Paths
         private static bool[] visited;
         static void Main(string[] args)
         {
-            var n = int.Parse(Console.ReadLine());
+            int numberOfNodes = int.Parse(Console.ReadLine());
 
-            graph = new List<int>[n];
-            visited = new bool[n];
-            IList<IList<int>> set;
-            for (int node = 0; node < n; node++)
+            List<List<int>> graph = new List<List<int>>();
+
+            for (int line = 0; line < numberOfNodes; line++)
             {
-                var line = Console.ReadLine();
-
-                if (string.IsNullOrEmpty(line))
+                string childNodes = Console.ReadLine();
+                if (childNodes.Length == 0)
                 {
-                    graph[node] = new List<int>();
+                    graph.Add(new List<int>());
                 }
                 else
                 {
-                    var childer = line.Split()
-                        .Select(int.Parse)
-                        .ToList();
-
-                    graph[node] = childer;
+                    graph.Add(childNodes.Split(" ").Select(int.Parse).ToList());
                 }
-                
             }
-
-
-            set = AllPathsSourceTarget(graph);
-            foreach (var item in set)
+            for (int startNode = 0; startNode < graph.Count() - 1; startNode++)
             {
-                Console.WriteLine(string.Join(" ", item));
+                List<int> path = new List<int>();
+                bool[] visited = new bool[graph.Count()];
+                path.Add(startNode);
+                findAllPathsToLastNode(startNode, graph, visited, path);
             }
 
         }
-        public static IList<IList<int>> AllPathsSourceTarget(List<int>[] graph)
+        private static void findAllPathsToLastNode(int currentNode, List<List<int>> graph, bool[] visited, List<int> path)
         {
-
-            List<IList<int>> res = new List<IList<int>>();
-            if (graph == null || graph.Length == 0)
-                return res;
-
-            DFS(graph, res, new List<int>() { 0 }, 0);
-            DFS(graph, res, new List<int>() , 0);
-            DFS(graph, res, new List<int>(), 1);
-
-            return res;
-        }
-
-        private static void DFS(List<int>[] graph, List<IList<int>> res, List<int> path, int i)
-        {
-            if (i == graph.Length - 1)
+            if (currentNode >= graph.Count() - 1)
             {
-                res.Add(new List<int>(path));
+                foreach (int? pathNode in path)
+                {
+                    Console.Write("{0:D} ", pathNode);
+                }
+                Console.WriteLine();
                 return;
             }
 
-            foreach (var next in graph[i])
+            if (visited[currentNode])
             {
-                path.Add(next);
-                DFS(graph, res, path, next);
-                path.RemoveAt(path.Count - 1);
+                return;
             }
+
+            visited[currentNode] = true;
+            foreach (var childNode in graph[currentNode])
+            {
+                path.Add(childNode);
+                findAllPathsToLastNode(childNode, graph, visited, path);
+                path.RemoveAt(path.Count() - 1);
+            }
+            visited[currentNode] = false;
+
         }
     }
 }
