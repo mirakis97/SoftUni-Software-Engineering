@@ -1,0 +1,21 @@
+{
+  "Version": 1,
+  "ProjectMap": {
+    "92148ad8-0447-47f6-86ae-3d525ea8fd1b": {
+      "ProjectGuid": "92148ad8-0447-47f6-86ae-3d525ea8fd1b",
+      "DisplayName": "01.",
+      "ColorIndex": 0
+    },
+    "8c369c1a-1ad9-4ee3-8352-fb30f06bfe52": {
+      "ProjectGuid": "8c369c1a-1ad9-4ee3-8352-fb30f06bfe52",
+      "DisplayName": "02. Universes",
+      "ColorIndex": 1
+    },
+    "04cf96ca-b3a6-4789-8f96-c5a2439f2a76": {
+      "ProjectGuid": "04cf96ca-b3a6-4789-8f96-c5a2439f2a76",
+      "DisplayName": "03. Strings Mashup",
+      "ColorIndex": 2
+    }
+  },
+  "NextColorIndex": 3
+}
